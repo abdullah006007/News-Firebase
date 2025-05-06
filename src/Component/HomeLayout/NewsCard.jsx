@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { use } from 'react';
 import { FaRegEye } from 'react-icons/fa';
 import { AiFillStar } from 'react-icons/ai';
 import { CiBookmark, CiShare2 } from 'react-icons/ci';
 import moment from 'moment';
+import { Link, Navigate } from 'react-router';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const NewsCard = ({ news }) => {
+  
   const {
+    id,
     title,
     rating,
     total_view,
@@ -13,6 +17,9 @@ const NewsCard = ({ news }) => {
     thumbnail_url,
     details,
   } = news;
+
+
+  const {user} = use(AuthContext)
 
   return (
     <div className="card bg-base-100 shadow-md  rounded-xl overflow-hidden mb-5 mt-5">
@@ -52,9 +59,11 @@ const NewsCard = ({ news }) => {
         <p className="text-sm text-gray-700 mb-3">
           {details.length > 200 ? `${details.slice(0, 200)}...` : details}
         </p>
-        <a href="#" className="text-blue-600 font-semibold hover:underline">
+        {
+          user?<Link to={`/news-details/${id}`} href="#" className="text-blue-600 font-semibold hover:underline">
           Read More
-        </a>
+        </Link>: <Navigate to={`/auth/login`}></Navigate>
+        }
       </div>
 
       {/* Footer: Rating and Views */}
